@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
-import styled, { keyframes } from 'styled-components'
+import React, { useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
 import OpenFormButton from './atoms/OpenFormButton';
+import FormModal from './atoms/FormModal';
+import ToastMessage from './molecules/ToastMessage';
+import LightMapCanvas from './atoms/LightMapCanvas';
+import { saveTestData } from './HandleData';
 
 const twinkle = keyframes`
   0% { opacity: 0.2; }
   50% { opacity: 1; }
   100% { opacity: 0.2; }
-`
+`;
 
 const generateRandomStars = (count: number) => {
   let stars = '';
@@ -16,18 +20,27 @@ const generateRandomStars = (count: number) => {
     stars += `radial-gradient(0.1px 0.1px at ${x}% ${y}%, white 0.1px, transparent 0),`;
   }
   return stars.slice(0, -1);
-}
+};
 
 export default function LightMapPage() {
   const [isOpen, setIsOpen] = useState(false);
-  
+  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+
+  // useEffect(() => {
+  //   saveTestData();
+  // }, []);
+
   return (
     <Style.Container>
       <Style.Stars />
       <Style.TwinklingStars />
+      <LightMapCanvas />
       <OpenFormButton setIsOpen={setIsOpen} />
+      {isOpen && <FormModal isOpen={setIsOpen} setIsSuccess={setIsSuccess} />}
+      {isSuccess && <ToastMessage type="success" onClose={() => setIsSuccess(null)} />}
+      {isSuccess === false && <ToastMessage type="error" onClose={() => setIsSuccess(null)} />}
     </Style.Container>
-  )
+  );
 }
 
 const Style = {
@@ -48,7 +61,7 @@ const Style = {
       left: 0;
       right: 0;
       bottom: 0;
-      background: 
+      background:
         radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
         radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
       pointer-events: none;
@@ -74,5 +87,5 @@ const Style = {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     animation: ${twinkle} 4s infinite;
-  `
-}
+  `,
+};

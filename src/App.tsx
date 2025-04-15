@@ -1,12 +1,14 @@
-import './App.css'
-import LightMapPage from './components/LightMapPage'
+import './App.css';
+import LightMapPage from './components/LightMapPage';
+import Footer from './components/atoms/Footer';
 
 function App() {
   return (
-    <div className="app" >
+    <div className="app">
       <LightMapPage />
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
