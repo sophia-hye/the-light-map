@@ -1,3 +1,4 @@
+import BaseOverlay from '@/styles/baseOverlay';
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 
@@ -57,15 +58,11 @@ export default function Footer() {
   );
 }
 
-const FooterContainer = styled.footer`
-  position: fixed;
+const FooterContainer = styled(BaseOverlay)`
   bottom: 0;
-  left: 0;
-  right: 0;
   padding: 1rem;
   color: #f9fafb;
   text-align: center;
-  z-index: 1000;
   font-size: 14px;
   font-weight: 300;
 `;

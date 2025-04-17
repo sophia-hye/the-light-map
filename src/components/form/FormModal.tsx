@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Form from './Form';
+import { isOpenState } from '../recoil/global';
+import { useRecoilState } from 'recoil';
 
-interface FormModalProps {
-  isOpen: (isOpen: boolean) => void;
-  setIsSuccess: (isSuccess: boolean) => void;
-}
+export default function FormModal() {
+  const [isOpen, setIsOpen] = useRecoilState(isOpenState);
 
-export default function FormModal({ isOpen, setIsSuccess }: FormModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        isOpen(false);
+        setIsOpen(false);
       }
     };
 
@@ -20,10 +19,10 @@ export default function FormModal({ isOpen, setIsSuccess }: FormModalProps) {
   }, [isOpen]);
 
   return (
-    <Style.Overlay onClick={() => isOpen(false)}>
+    <Style.Overlay onClick={() => setIsOpen(false)}>
       <Style.Modal onClick={e => e.stopPropagation()}>
         <Style.Scrollbar>
-          <Form isOpen={isOpen} setIsSuccess={setIsSuccess} />
+          <Form />
         </Style.Scrollbar>
       </Style.Modal>
     </Style.Overlay>
@@ -41,7 +40,7 @@ const Style = {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 50;
   `,
   Modal: styled.div`
     background-color: white;

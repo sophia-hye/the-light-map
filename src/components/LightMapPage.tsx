@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import OpenFormButton from './atoms/OpenFormButton';
-import FormModal from './atoms/FormModal';
-import ToastMessage from './molecules/ToastMessage';
-import LightMapCanvas from './atoms/LightMapCanvas';
-import { saveTestData } from './HandleData';
+import OpenFormButton from './sticky/OpenFormButton';
+// import FormModal from './form/FormModal';
+import ToastMessage from './popup/ToastMessage';
+import LightMapCanvas from './canvas/UserStarCanvas';
+import { useSaveTestData } from './features/useHandleData';
+// import { generateRandomStars } from './features/generator';
+// import { isOpenState } from './recoil/global';
 
 const twinkle = keyframes`
   0% { opacity: 0.2; }
@@ -12,46 +14,38 @@ const twinkle = keyframes`
   100% { opacity: 0.2; }
 `;
 
-const generateRandomStars = (count: number) => {
-  let stars = '';
-  for (let i = 0; i < count; i++) {
-    const x = Math.random() * 100;
-    const y = Math.random() * 100;
-    stars += `radial-gradient(0.1px 0.1px at ${x}% ${y}%, white 0.1px, transparent 0),`;
-  }
-  return stars.slice(0, -1);
-};
-
 export default function LightMapPage() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
-
-  // useEffect(() => {
-  //   saveTestData();
-  // }, []);
+  const [needLoad, setNeedLoad] = useState(true);
+  useSaveTestData(1000, needLoad);
+  useEffect(() => {
+    if (needLoad) setNeedLoad(false);
+  }, []);
 
   return (
     <Style.Container>
-      <Style.Stars />
-      <Style.TwinklingStars />
+      {/* <Style.Stars /> */}
+      {/* <Style.TwinklingStars /> */}
       <LightMapCanvas />
-      <OpenFormButton setIsOpen={setIsOpen} />
-      {isOpen && <FormModal isOpen={setIsOpen} setIsSuccess={setIsSuccess} />}
-      {isSuccess && <ToastMessage type="success" onClose={() => setIsSuccess(null)} />}
-      {isSuccess === false && <ToastMessage type="error" onClose={() => setIsSuccess(null)} />}
+      <OpenFormButton />
+      {/* {isOpen && <FormModal />} */}
+      <ToastMessage />
     </Style.Container>
   );
 }
 
 const Style = {
   Container: styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
+    z-index: 10;
+
     display: flex;
     justify-content: center;
     align-items: center;
     background: linear-gradient(135deg, #050510, #0a0a1a, #050510);
-    position: relative;
     overflow: hidden;
 
     &::before {
@@ -67,25 +61,25 @@ const Style = {
       pointer-events: none;
     }
   `,
-  Stars: styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: ${() => generateRandomStars(100)};
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-  `,
-  TwinklingStars: styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: ${() => generateRandomStars(50)};
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    animation: ${twinkle} 4s infinite;
-  `,
+  // Stars: styled.div`
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   background-image: ${() => generateRandomStars(100)};
+  //   background-size: 100% 100%;
+  //   background-repeat: no-repeat;
+  // `,
+  // TwinklingStars: styled.div`
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   background-image: ${() => generateRandomStars(50)};
+  //   background-size: 100% 100%;
+  //   background-repeat: no-repeat;
+  //   animation: ${twinkle} 4s infinite;
+  // `,
 };
