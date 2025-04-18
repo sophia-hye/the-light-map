@@ -6,19 +6,18 @@ interface Props extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 export default function Description() {
-  return (
-    <Styled.Container>
-      iNKODE는 아티스트들로 빛나는 것이 아닌, 수많은 팬과 함께 만들어가는 하나의 우주입니다.
-    </Styled.Container>
-  );
+  const message = '“Every spark begins with you — every shine becomes iNKODE.”';
+
+  return <Styled.Message>{message} </Styled.Message>;
 }
 
 const Styled = {
-  Container: styled.span`
+  Message: styled.span`
     font-family: 'Noto Sans KR', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: -0.01em;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.8);
   `,
 };

@@ -1,34 +1,39 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import { isOpenState, selectedStarState } from '../recoil/global';
 import BackgroundLayer from './BackgroundLayer';
 import UserStarCanvas from './UserStarCanvas';
-import OpenFormButton from '../sticky/OpenFormButton';
+import MyStarModal from './MyStarModal';
 import ToastMessage from '../popup/ToastMessage';
+import OpenFormButton from '../sticky/OpenFormButton';
 import FormModal from '../form/FormModal';
-import { isOpenState, starDataState } from '../recoil/global';
-import { useRecoilValue } from 'recoil';
 import { useSaveTestData } from '../features/useHandleData';
 
 export default function LightMap() {
-  const isOpen = useRecoilValue(isOpenState);
   const loadTestDataRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [containerRect, setContainerRect] = useState<DOMRect | null>(null);
+
+  const isOpen = useRecoilValue(isOpenState);
+  const selectedStar = useRecoilValue(selectedStarState);
+
   useSaveTestData(1000, !loadTestDataRef.current);
 
-  const [needLoad, setNeedLoad] = useState(true);
-  useSaveTestData(100, needLoad);
   useEffect(() => {
-    if (needLoad) {
-      setNeedLoad(false);
-    }
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setContainerRect(rect);
   }, []);
 
   return (
-    <Style.Container>
+    <Style.Container ref={containerRef}>
       <BackgroundLayer>
         <OpenFormButton />
         <UserStarCanvas />
         {isOpen && <FormModal />}
-        {/* {selectedStar && <MyStarModal />} */}
+        {selectedStar && containerRect && <MyStarModal containerRect={containerRect} />}
         <ToastMessage />
       </BackgroundLayer>
     </Style.Container>

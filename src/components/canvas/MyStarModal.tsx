@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
 import { selectedStarState } from '../recoil/global';
 
-export default function MyStarModal() {
-  const [selectedStar, setSelectedStar] = useRecoilState(selectedStarState);
-  const position: PositionType = selectedStar ? selectedStar.position : { x: 0, y: 0 };
+type MyStarModalProps = {
+  containerRect: DOMRect;
+};
 
+export default function MyStarModal({ containerRect }: MyStarModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const [selectedStar, setSelectedStar] = useRecoilState(selectedStarState);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
@@ -15,26 +18,26 @@ export default function MyStarModal() {
 
     const modalWidth = modalRef.current.offsetWidth || 300;
     const modalHeight = modalRef.current.offsetHeight || 200;
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
 
-    let top = position.y;
-    let left = position.x;
+    const { width, height, top: offsetTop, left: offsetLeft } = containerRect;
+    const { x, y } = selectedStar.position;
 
-    if (position.x + modalWidth > windowWidth) {
-      left = position.x - modalWidth - 20;
-    } else {
-      left = position.x + 20;
+    const padding = 2;
+    const starX = (x / 100) * width + offsetLeft;
+    const starY = (y / 100) * height + offsetTop;
+
+    let left = starX + padding;
+    if (left + modalWidth > window.innerWidth) {
+      left = starX - modalWidth - padding;
     }
 
-    if (position.y + modalHeight > windowHeight) {
-      top = position.y - modalHeight - 20;
-    } else {
-      top = position.y + 20;
+    let top = starY + padding;
+    if (top + modalHeight > window.innerHeight) {
+      top = starY - modalHeight - padding;
     }
 
     setModalPosition({ top, left });
-  }, [selectedStar, position]);
+  }, [selectedStar, containerRect]);
 
   const handleCloseModal = useCallback(() => {
     setSelectedStar(null);

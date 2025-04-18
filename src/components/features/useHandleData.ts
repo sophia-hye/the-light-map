@@ -19,7 +19,7 @@ const generateTestData = (testCount: number): StarData[] => {
       name: `Light${i + 1}`,
       emotion: generateEmotion(),
       shape: generateShape(),
-      size: 2, // generateSize(),
+      size: generateSize(),
       color: generateColor(),
       country: generateCountry(),
       message: `This is a test message ${i + 1}. Let's spread light and hope together!`,

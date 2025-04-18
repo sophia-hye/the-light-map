@@ -35,8 +35,8 @@ export default function BackgroundLayer({ children }: BackgroundLayerProps) {
         -> 단일 div로 퍼포먼스 좋음
         -> 개별 제어가 어렵고 개별 interaction 불가능
          */}
-        <Background.Stars bgImage={backgroundStars} />
-        <Background.TwinkleStars bgImage={twinklingStars} />
+        <Background.Stars $bgImage={backgroundStars} />
+        <Background.TwinkleStars $bgImage={twinklingStars} />
         <UserData.Container>{children}</UserData.Container>
       </Background.Sky>
     </Background.Container>
@@ -75,23 +75,23 @@ const Background = {
     right: 0;
     bottom: 0;
   `,
-  Stars: styled.div<{ bgImage: string }>`
+  Stars: styled.div<{ $bgImage: string }>`
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: ${({ bgImage }) => bgImage};
+    background-image: ${({ $bgImage }) => $bgImage};
     background-size: 100% 100%;
     background-repeat: no-repeat;
   `,
-  TwinkleStars: styled.div<{ bgImage: string }>`
+  TwinkleStars: styled.div<{ $bgImage: string }>`
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: ${({ bgImage }) => bgImage};
+    background-image: ${({ $bgImage }) => $bgImage};
     background-size: 100% 100%;
     background-repeat: no-repeat;
     animation: twinkle 4s infinite;
